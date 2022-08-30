@@ -2,7 +2,7 @@
 #include "parse.h"
 #include "echo.h"
 #include "pwd.h"
-
+#include "cd.h"
 
 void parse(char *input){
     char *string = malloc(1000*(sizeof(char))), *token, *subtoken, *ptr1, *ptr2;
@@ -24,15 +24,13 @@ void parse(char *input){
             echo_cmd(commands);
         else if (strcmp(commands[0],"pwd")==0) 
             pwd_cmd();
+        else if (strcmp(commands[0],"cd")==0) 
+            cd_cmd(argc,commands);
         else if (strcmp(commands[0], "exit") == 0)
             exit(0);
-        // else if (strcmp(commands[0],"cd")) 
-        //     cd_cmd();
-        else
-            printf("Invalid Command");
-            
         token = strtok_r(NULL,";\n",&ptr1);
     }
+    free(string);
     return;
 }
 
