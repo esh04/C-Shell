@@ -1,6 +1,7 @@
 #include "headers.h"
 #include "parse.h"
 #include "echo.h"
+#include "pwd.h"
 
 
 void parse(char *input){
@@ -21,13 +22,15 @@ void parse(char *input){
         // execute command here
         if (strcmp(commands[0],"echo")==0) 
             echo_cmd(commands);
-        // else if (strcmp(arg_list[0],"pwd")) 
-        //     pwd_cmd();
-        // else if (strcmp(arg_list[0],"cd")) 
+        else if (strcmp(commands[0],"pwd")==0) 
+            pwd_cmd();
+        else if (strcmp(commands[0], "exit") == 0)
+            exit(0);
+        // else if (strcmp(commands[0],"cd")) 
         //     cd_cmd();
- 
-
-
+        else
+            printf("Invalid Command");
+            
         token = strtok_r(NULL,";\n",&ptr1);
     }
     return;
