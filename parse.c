@@ -3,6 +3,8 @@
 #include "echo.h"
 #include "pwd.h"
 #include "cd.h"
+#include "pinfo.h"
+#include "ls.h"
 
 void parse(char *input){
     char *string = malloc(1000*(sizeof(char))), *token, *subtoken, *ptr1, *ptr2;
@@ -26,11 +28,15 @@ void parse(char *input){
             pwd_cmd();
         else if (strcmp(commands[0],"cd")==0) 
             cd_cmd(argc,commands);
+        else if (strcmp(commands[0],"pinfo")==0) 
+            pinfo_cmd(argc, commands);
+        else if (strcmp(commands[0], "ls") == 0)
+            ls_cmd(argc, commands);
         else if (strcmp(commands[0], "exit") == 0)
             exit(0);
         token = strtok_r(NULL,";\n",&ptr1);
+        free(commands);
     }
     free(string);
     return;
 }
-

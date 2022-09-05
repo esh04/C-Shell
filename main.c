@@ -2,6 +2,9 @@
 #include "prompt.h"
 #include "parse.h"
 
+char *home;
+char *prev_dir;
+
 int main()
 {
     // store home directory

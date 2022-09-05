@@ -32,6 +32,7 @@ void cd_cmd(int argc, char **arg_list){
                 }
                 strcat(newpath,temp);
                 chdir(newpath);
+                free(newpath);
             }
             else
             {  
@@ -40,7 +41,7 @@ void cd_cmd(int argc, char **arg_list){
         }
     }
     else {
-        printf("cd: Too many arguements\n");
+        fprintf(stderr,"cd: Too many arguements\n");
         return;
     }
     prev_dir = curr_dir;

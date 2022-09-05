@@ -6,13 +6,18 @@
 #include <pwd.h>
 #include <string.h>
 #include <stdlib.h>
+// #include <error.h>
+#include <mach/error.h>
+#include <errno.h>
+#include <fcntl.h>
+#include<stdbool.h>  
 
 #define MAX_SIZE 1000
 #define MAX_LINE 300
 
 // global variables
 
-char *home; // home directory
-char *prev_dir;
+extern char *home; // home directory
+extern char *prev_dir;
 
 #endif
