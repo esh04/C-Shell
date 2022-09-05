@@ -1,2 +1,5 @@
 # C-Shell
-Shell made in C
+
+- To run the shell
+    - `make`
+    - `./a.out`
