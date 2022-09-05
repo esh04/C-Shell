@@ -17,7 +17,8 @@ void prompt() {
 
     // check if home is a substring of the current path 
     if(substring){
-        strcpy(disp_path,substring+strlen(home));
+        disp_path = substring + strlen(home);
+        // strcpy(disp_path,substring+strlen(home));
         printf("<%s@%s:~%s>", username, hostname, disp_path);
     }
     else

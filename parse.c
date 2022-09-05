@@ -23,7 +23,7 @@ void parse(char *input){
         }
         // execute command here
         if (strcmp(commands[0],"echo")==0) 
-            echo_cmd(commands);
+            echo_cmd(argc,commands);
         else if (strcmp(commands[0],"pwd")==0) 
             pwd_cmd();
         else if (strcmp(commands[0],"cd")==0) 
