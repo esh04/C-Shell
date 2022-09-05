@@ -1,0 +1,7 @@
+exit
+history
+exit
+history 
+history 1
+history
+pwd

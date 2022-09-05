@@ -10,7 +10,13 @@ void pinfo_cmd(int argc, char **arg_list){
         pid = (int)(getpid());
     }
     else if(argc == 2){
+        // if(isdigit(arg_list[1]))
+        //     pid = atoi(arg_list[1]);
+        // else
+        // perror("pinfo: Invalid arguement.\n");
+
         pid = atoi(arg_list[1]);
+
     }
     else {
         perror("pinfo: Too many arguements\n");

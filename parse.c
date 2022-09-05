@@ -5,9 +5,10 @@
 #include "cd.h"
 #include "pinfo.h"
 #include "ls.h"
+#include "history.h"
 
 void parse(char *input){
-    char *string = malloc(1000*(sizeof(char))), *token, *subtoken, *ptr1, *ptr2;
+    char *string = malloc(MAX_SIZE*(sizeof(char))), *token, *subtoken, *ptr1, *ptr2;
     strcpy(string, input);
     token = strtok_r(string, ";\n", &ptr1);
 
@@ -32,6 +33,8 @@ void parse(char *input){
             pinfo_cmd(argc, commands);
         else if (strcmp(commands[0], "ls") == 0)
             ls_cmd(argc, commands);
+        else if (strcmp(commands[0], "history") == 0)
+            history_cmd(argc, commands);
         else if (strcmp(commands[0], "exit") == 0)
             exit(0);
         token = strtok_r(NULL,";\n",&ptr1);

@@ -10,7 +10,9 @@
 #include <mach/error.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <ctype.h>
 #include<stdbool.h>  
+#include <sys/stat.h>
 
 #define MAX_SIZE 1000
 #define MAX_LINE 300

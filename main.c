@@ -1,20 +1,25 @@
 #include "headers.h"
 #include "prompt.h"
 #include "parse.h"
+#include "history.h"
 
 char *home;
 char *prev_dir;
 char **history;
 char *history_path;
 
-void main()
+int main()
 {
     // store home directory
     home = getcwd(NULL,0);
-    history_path = malloc(MAX_SIZE*sizeof (char));
-    sprintf(history_path,"%s/history.txt",getcwd(NULL,0));
     prev_dir = NULL;
-    history = calloc(MAX_HISTORY,sizeof(char *));
+
+    // history_path = malloc(MAX_SIZE*sizeof (char)); 
+    // sprintf(history_path,"%s/history.txt",getcwd(NULL,0));
+    history_path ="./history.txt";
+
+    history = malloc(MAX_HISTORY*sizeof(char *));
+    load_history();
 
     while (1)
     {
@@ -24,8 +29,11 @@ void main()
 
         ssize_t flag1 = getline(&line,&sz,stdin);
 
+        store_history(line);
         parse(line);
-    }
 
-    return;
+    }
+    free(history);
+    free(history_path);
+    return 0;
 }
