@@ -6,8 +6,8 @@
 #include <pwd.h>
 #include <string.h>
 #include <stdlib.h>
-// #include <error.h>
-#include <mach/error.h>
+#include <error.h>
+// #include <mach/error.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <ctype.h>
@@ -15,6 +15,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <grp.h>
+#include <time.h>
 #include <sys/types.h>
 
 #define MAX_SIZE 1000

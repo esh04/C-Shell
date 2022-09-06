@@ -1,8 +1,8 @@
 #ifndef __PROMPT_H
 #define __PROMPT_H
 
-#define HOST_NAME_MAX 300
-#define USER_NAME_MAX 300
+#define MAX_HOST_NAME 300
+#define MAX_USER_NAME 300
 
 void prompt();
 

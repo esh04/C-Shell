@@ -42,15 +42,25 @@ void display_dir(char *path, bool flagA, bool flagL, struct stat buf){
     while ((d = readdir(dh)) != NULL)
     {
 
+        printf("\033[0m");
+
+        strcpy(temp, path);
+        strcat(temp, "/");
+        strcat(temp, d->d_name);
+        stat(temp, &buf);
+
         if(S_ISDIR(buf.st_mode)){
             printf("\033[0;34m");
+
         }
         else if(S_ISREG(buf.st_mode)) 
         {
             printf("\033[0;37m");
         }
-        else if(S_IXUSR & buf.st_mode)
+
+        else if(buf.st_mode & S_IXUSR)
             printf("\033[0;33m");
+
 
         if (flagA == 0 && d->d_name[0] == '.')
         {
@@ -63,14 +73,10 @@ void display_dir(char *path, bool flagA, bool flagL, struct stat buf){
             struct group *gid;
 
             char datetime[MAX_SIZE];
-            strcpy(temp, path);
-            strcat(temp, "/");
-            strcat(temp, d->d_name);
-            stat(temp, &buf);
-            stat(temp, &buf);
 
             if(S_ISDIR(buf.st_mode)){
                 printf("d");
+
             }
             else if(S_ISREG(buf.st_mode)) 
             {
@@ -87,7 +93,6 @@ void display_dir(char *path, bool flagA, bool flagL, struct stat buf){
             printf((buf.st_mode & S_IWOTH) ? "w" : "-");
             printf((buf.st_mode & S_IXOTH) ? "x " : "- ");
 
-            fileperms(temp);
             printf("%ld ", buf.st_nlink);
 
 
@@ -138,7 +143,17 @@ void display_file(char *path, bool flag_l, struct stat buf){
     if (flag_l)
     {
         char datetime[MAX_SIZE];
-        fileperms(path);
+            printf("-");
+            printf((buf.st_mode & S_IRUSR) ? "r" : "-");
+            printf((buf.st_mode & S_IWUSR) ? "w" : "-");
+            printf((buf.st_mode & S_IXUSR) ? "x" : "-");
+            printf((buf.st_mode & S_IRGRP) ? "r" : "-");
+            printf((buf.st_mode & S_IWGRP) ? "w" : "-");
+            printf((buf.st_mode & S_IXGRP) ? "x" : "-");
+            printf((buf.st_mode & S_IROTH) ? "r" : "-");
+            printf((buf.st_mode & S_IWOTH) ? "w" : "-");
+            printf((buf.st_mode & S_IXOTH) ? "x " : "- ");
+
         printf("%ld ", buf.st_nlink);
         printf("%s ", getpwuid(buf.st_uid)->pw_name);
         printf("%s ", getgrgid(buf.st_gid)->gr_name);
@@ -213,12 +228,12 @@ void ls_cmd(int argc, char **arg_list){
     if(num == 0){
         num = 1;
         struct stat buf;
-        int r = stat('.', &buf);
+        int r = stat(".", &buf);
         if (r == -1)
         {
             fprintf(stderr, "ls: Error\n");
         }
-        display_dir('.', flag_a, flag_l, buf);
+        display_dir(".", flag_a, flag_l, buf);
         return;
     }
 
@@ -236,17 +251,14 @@ void ls_cmd(int argc, char **arg_list){
             if (S_ISDIR(buf.st_mode))
             {
                 if(num>1)
-                    print("%s:\n", pathsArray[i]);
+                    printf("%s:\n", pathsArray[i]);
 
-                if(strcmp(pathsArray[i],'~'))
+                if(strcmp(pathsArray[i],"~"))
                     display_dir(home, flag_a, flag_l, buf);
                 else
                     display_dir(pathsArray[i], flag_a, flag_l, buf);
            
-                if (i < num - 1)
-                {
-                    printf("\n");
-                }  
+
             
             }
             else    
@@ -254,6 +266,11 @@ void ls_cmd(int argc, char **arg_list){
               display_file(pathsArray[i],flag_l,buf); 
             }
         }
+
+        if (i < num - 1)
+        {
+            printf("\n");
+        }  
     }
     return;
 }
