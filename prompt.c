@@ -2,12 +2,12 @@
 #include "headers.h"
 
 void prompt() {
-    char hostname[HOST_NAME_MAX];
-    char username[USER_NAME_MAX];
+    char hostname[MAX_HOST_NAME];
+    char username[MAX_USER_NAME];
 
     // get username hostname
-    gethostname(hostname, HOST_NAME_MAX);
-    getlogin_r(username, USER_NAME_MAX);
+    gethostname(hostname, MAX_HOST_NAME);
+    getlogin_r(username, MAX_USER_NAME);
 
     char *curr_path = getcwd(NULL,0); 
 
