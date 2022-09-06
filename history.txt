@@ -1,4 +1,9 @@
 exit
+ls -al
+ls
+exit
+ls
+exit
 history
 exit
 history 

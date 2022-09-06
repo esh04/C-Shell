@@ -6,6 +6,7 @@
 #include "pinfo.h"
 #include "ls.h"
 #include "history.h"
+#include "execvp.h"
 
 void parse(char *input){
     char *string = malloc(MAX_SIZE*(sizeof(char))), *token, *subtoken, *ptr1, *ptr2;
@@ -39,12 +40,12 @@ void parse(char *input){
             // discover_cmd(argc, commands);
         else if (strcmp(commands[0], "exit") == 0)
             exit(0);
-        // else
-            // execvp_cmd(argc,commands);
+        else
+            execvp_cmd(argc,commands);
 
         token = strtok_r(NULL,";\n",&ptr1);
         free(commands);
     }
     free(string);
     return;
-}
+}  
