@@ -1,71 +1,83 @@
 #include "headers.h"
+#include "ls.h"
 
+void sort_list(int count, char **list)
+{
+  char temp[MAX_SIZE];
+  for(int i=0; i<count; i++){
+    for(int j=0; j<count-1-i; j++){
+      if(strcasecmp(list[j], list[j+1]) > 0){
+        strcpy(temp, list[j]);
+        strcpy(list[j], list[j+1]);
+        strcpy(list[j+1], temp);
+      }
+    }
+  }
+}
 void display_dir(char *path, bool flagA, bool flagL, struct stat buf){
 
-    if (flagL)
-    {
-        struct dirent *d;
-        char temp[MAX_SIZE];
+    char **list = (char**)(malloc(MAX_SIZE*(sizeof(char*))));
+    int idx=0;
 
-        DIR *dh = opendir(path);
-        if (!dh)
-        {
-            fprintf(stderr, "ls: Can't open directory.\n");
-            return;
-        }
-
-        long total = 0;
-    
-        // print total on top
-        while ((d = readdir(dh)) != NULL) 
-        {
-            strcpy(temp, path);
-            strcat(temp, "/");
-            strcat(temp, d->d_name);
-            stat(temp, &buf);
-            total += buf.st_blocks;
-        }
-        
-        printf("total %ld\n", total / 2);
-    }
-    
     struct dirent *d;
     char temp[MAX_SIZE];
+
     DIR *dh = opendir(path);
+    DIR *dh2 = opendir(path);
     if (!dh)
     {
         fprintf(stderr, "ls: Can't open directory.\n");
         return;
     }
 
+    long total = 0;
 
-    while ((d = readdir(dh)) != NULL)
+    while ((d = readdir(dh)) != NULL) 
     {
+        if (flagA == 0 && d->d_name[0] == '.')
+        {
+            continue;
+        }
+        list[idx] = (char*)malloc(sizeof(char) * MAX_SIZE);
+        char *temp2 = (char*)malloc(sizeof(char) * MAX_SIZE);
+        strcpy(temp2, path);
+        strcat(temp2, "/");
+        strcat(temp2, d->d_name);
+        stat(temp2, &buf);
+        total += buf.st_blocks;
 
+        strcpy(list[idx],  d->d_name);
+        idx++;
+
+        free(temp2);
+    }
+
+    if(flagL)
+        printf("total %ld\n", total / 2);
+
+    sort_list(idx, list);
+
+    for(int j = 0; j< idx; j++)
+    {
+        char *temp2 = (char*)malloc(sizeof(char) * MAX_SIZE);
+
+        strcpy(temp2, path);
+        strcat(temp2, "/");
+        strcat(temp2, list[j]);
         printf("\033[0m");
-
-        strcpy(temp, path);
-        strcat(temp, "/");
-        strcat(temp, d->d_name);
-        stat(temp, &buf);
+        stat(temp2, &buf);
 
         if(S_ISDIR(buf.st_mode)){
             printf("\033[0;34m");
-
         }
+        else if(buf.st_mode & S_IXUSR || buf.st_mode & S_IXGRP || buf.st_mode & S_IXOTH )
+            printf("\033[0;33m");
         else if(S_ISREG(buf.st_mode)) 
         {
             printf("\033[0;37m");
         }
 
-        else if(buf.st_mode & S_IXUSR)
-            printf("\033[0;33m");
 
-
-        if (flagA == 0 && d->d_name[0] == '.')
-        {
-            continue;
-        }
         if (flagL)
         {
 
@@ -120,12 +132,11 @@ void display_dir(char *path, bool flagA, bool flagL, struct stat buf){
             printf("%s ", datetime);
         }
 
-
-
-
-        printf("%s  ", d->d_name);
+        printf("%s  ", list[j]);
         if (flagL)
             printf("\n");
+
+        free(temp2);
     }
     if (flagL == 0)
     {
@@ -134,6 +145,9 @@ void display_dir(char *path, bool flagA, bool flagL, struct stat buf){
 
     printf("\033[0m");
 
+    for(int j = 0; j<idx;j++)
+        free(list[j]);
+    free(list);
 
 }
 
@@ -167,22 +181,7 @@ void display_file(char *path, bool flag_l, struct stat buf){
 
 }
 
-// void sort_list(int count, char **list){
-//     for(int x=0;x<count;x++)
-//     {
-//         for(int y=0;y<count-1-x;y++)
-//         {
-//             if(strcmp(list[y],list[y+1])>0)
-//             {
-//                 // swap strings
-//                 char *temp = NULL;
-//                 temp=list[y];
-//                 list[y]=list[y+1];
-//                 list[y+1]=temp;
-//             }
-//         }
-//     }    
-// }
+
 
 void ls_cmd(int argc, char **arg_list){
 
@@ -253,13 +252,11 @@ void ls_cmd(int argc, char **arg_list){
                 if(num>1)
                     printf("%s:\n", pathsArray[i]);
 
-                if(strcmp(pathsArray[i],"~"))
+                if(strcmp(pathsArray[i],"~") == 0)
                     display_dir(home, flag_a, flag_l, buf);
                 else
                     display_dir(pathsArray[i], flag_a, flag_l, buf);
-           
 
-            
             }
             else    
             {
