@@ -13,6 +13,9 @@
 #include <ctype.h>
 #include<stdbool.h>  
 #include <sys/stat.h>
+#include <dirent.h>
+#include <grp.h>
+#include <sys/types.h>
 
 #define MAX_SIZE 1000
 #define MAX_LINE 300

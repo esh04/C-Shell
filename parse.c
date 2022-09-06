@@ -35,8 +35,13 @@ void parse(char *input){
             ls_cmd(argc, commands);
         else if (strcmp(commands[0], "history") == 0)
             history_cmd(argc, commands);
+        // else if(strcmp(commands[0], "discover") == 0)
+            // discover_cmd(argc, commands);
         else if (strcmp(commands[0], "exit") == 0)
             exit(0);
+        // else
+            // execvp_cmd(argc,commands);
+
         token = strtok_r(NULL,";\n",&ptr1);
         free(commands);
     }
