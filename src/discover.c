@@ -34,6 +34,12 @@ void discover(char *target_dir, bool flag_d, bool flag_f, char *file){
                 continue;
             } 
 
+            // to include the hidden files, comment out code 33-34 and uncomment the below code
+            // if(strcmp(content->d_name, ".") == 0 || strcmp(content->d_name, "..") == 0  ) {
+                // continue;
+            // } 
+
+
             if(file)
             {               
                 if(strcmp(content->d_name, file) == 0) {

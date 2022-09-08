@@ -21,9 +21,9 @@ int main()
 
     time_taken_fg = 0;
 
-    // history_path = malloc(MAX_SIZE*sizeof (char)); 
-    // sprintf(history_path,"%s/history.txt",getcwd(NULL,0));
-    history_path ="./history.txt";
+    history_path = malloc(MAX_SIZE*sizeof (char)); 
+    sprintf(history_path,"%s/history.txt",home);
+    // history_path ="./history.txt";
 
     history = malloc(MAX_HISTORY*sizeof(char *));
     load_history();
