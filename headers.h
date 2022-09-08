@@ -35,5 +35,6 @@ extern char *history_path;
 extern int shell_grpid;
 extern processList process_list[MAX_LINE];
 extern int bg_idx;
+extern int time_taken_fg;
 
 #endif

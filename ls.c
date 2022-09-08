@@ -216,6 +216,18 @@ void ls_cmd(int argc, char **arg_list){
             strcpy(pathsArray[num],home);
             num++;
         }
+        // replace ~ with home directory
+        else if (token[0] == '~')
+        {
+            char *temp = (char*)malloc(sizeof(char) * MAX_SIZE);
+            strcpy(temp, token);
+            strcpy(token, home);
+            strcat(token, temp+1);
+            free(temp);
+
+            strcpy(pathsArray[num], token);
+
+        }
         else
         {
             strcpy(pathsArray[num], token);

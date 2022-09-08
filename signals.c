@@ -19,7 +19,10 @@ int remove_process(int pid){
     for(int x=0;x<MAX_LINE;x++)
         if(process_list[x].pid == pid)
         { 
-            process_list[x].pid = 0, process_list[x].process_name = NULL;
+            process_list[x].pid = 0;
+            free(process_list[x].process_name);
+            process_list[x].process_name = NULL;
+
             bg_idx--;
             return 0;    
         }
@@ -29,7 +32,12 @@ int remove_process(int pid){
 int add_process(int pid, char * name){
     for(int x=0;x<MAX_LINE;x++)
         if(process_list[x].pid == 0){
-            process_list[x].pid = pid, process_list[x].process_name = name;
+
+            process_list[x].pid = pid;
+
+            // copy name to process_list[x].process_name
+            process_list[x].process_name = malloc(MAX_SIZE*sizeof(char));
+            strcpy(process_list[x].process_name,name);
             bg_idx++;
             return 0;
         }

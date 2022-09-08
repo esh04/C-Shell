@@ -25,7 +25,11 @@ void execvp_cmd(int argc, char **arg_list){
             break;
         }  
     }
+
     pid_t forkReturn = fork();
+    int status;
+
+
     if(forkReturn < 0)
     {
         perror("fork failed");
@@ -51,8 +55,19 @@ void execvp_cmd(int argc, char **arg_list){
     {
         if(bg_flag == false)
         {
-            int status;
-            waitpid(forkReturn, &status, WUNTRACED);
+            int start = time(NULL);
+            pid_t pid = waitpid(forkReturn,&status,WUNTRACED);
+            int end = time(NULL);
+
+            time_taken_fg = end - start;
+
+            // setpgid(forkReturn,0);
+            // signal(SIGTTOU, SIG_IGN);
+            // tcsetpgrp(0, forkReturn);
+
+            // count number of seconds child runs for
+            // tcsetpgrp(0, getpgrp());
+            // signal(SIGTTOU, SIG_DFL);
         }
         else
         {

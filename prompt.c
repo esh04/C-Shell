@@ -1,6 +1,7 @@
 #include "prompt.h"
 #include "headers.h"
 
+
 void prompt() {
     char hostname[MAX_HOST_NAME];
     char username[MAX_USER_NAME];
@@ -19,12 +20,18 @@ void prompt() {
     if(substring){
         disp_path = substring + strlen(home);
         // strcpy(disp_path,substring+strlen(home));
-        printf("<%s@%s:~%s>", username, hostname, disp_path);
+        if(time_taken_fg >= 1)
+            printf("<%s@%s:~%s Took %ds>", username, hostname, disp_path, time_taken_fg);
+        else
+            printf("<%s@%s:~%s>", username, hostname, disp_path);
     }
     else
     {
         disp_path=curr_path;
-        printf("<%s@%s:%s>", username, hostname, disp_path);
+        if(time_taken_fg >= 1)
+            printf("<%s@%s:~%s Took %ds>", username, hostname, disp_path, time_taken_fg);
+        else
+            printf("<%s@%s:%s>", username, hostname, disp_path);
     }
     
 }
