@@ -22,10 +22,11 @@ int main()
     time_taken_fg = 0;
 
     history_path = malloc(MAX_SIZE*sizeof (char)); 
-    sprintf(history_path,"%s/history.txt",home);
+    sprintf(history_path,"%s/src/history.txt",home);
     // history_path ="./history.txt";
 
     history = malloc(MAX_HISTORY*sizeof(char *));
+
     load_history();
 
     init_process_list();

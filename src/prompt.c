@@ -21,7 +21,10 @@ void prompt() {
         disp_path = substring + strlen(home);
         // strcpy(disp_path,substring+strlen(home));
         if(time_taken_fg >= 1)
+        {
             printf("<%s@%s:~%s Took %ds>", username, hostname, disp_path, time_taken_fg);
+            time_taken_fg = 0;
+        }
         else
             printf("<%s@%s:~%s>", username, hostname, disp_path);
     }

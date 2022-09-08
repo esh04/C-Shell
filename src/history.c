@@ -1,6 +1,15 @@
 #include "headers.h"
 #include "history.h"
 
+int file_exists(char *path)
+{
+    FILE *f = fopen(path,"r+");
+    if(!f)
+        return 0;
+    fclose(f);
+    return 1;
+}
+
 void load_history(){
 
     for(int i=0;i<MAX_HISTORY;i++)
@@ -10,12 +19,11 @@ void load_history(){
         
         FILE *f = fopen(history_path,"r");
 
-        if(f = NULL)
+        if(!f)
         {
             fprintf(stderr,"history: cannot open file to read\n");
-            return
+            return;
         }
-
 
         char *cmd = NULL;
         size_t sz = MAX_SIZE;
@@ -24,7 +32,8 @@ void load_history(){
         while (getline(&cmd,&sz,f)!=-1){
             char *temp = malloc(MAX_SIZE*sizeof(char));
             strcpy(temp,cmd);
-            history[hist_idx++] = temp;
+            history[hist_idx] = temp;
+            hist_idx++;
         }
 
         if(fclose(f) != 0)
@@ -78,13 +87,13 @@ void display_history(int num){
     //     x--;
     // }
 
-    for(int i=0;i<num;i++)
+    for(int i=0;i<num;i++){
         if(history[num-i]==NULL)
         {
             continue;
         }
-        printf("%s", history[num-x]);
-
+        printf("%s", history[num-i]);
+    }
 }
 
 void history_cmd(int argc, char **arg_list){
