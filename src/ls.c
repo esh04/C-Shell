@@ -81,8 +81,9 @@ void display_dir(char *path, bool flagA, bool flagL, struct stat buf){
         if (flagL)
         {
 
-            struct passwd *pw;
-            struct group *gid;
+            struct passwd *pw = getpwuid(buf.st_uid);
+            struct group *gid = getgrgid(buf.st_gid);
+
 
             char datetime[MAX_SIZE];
 
@@ -107,20 +108,17 @@ void display_dir(char *path, bool flagA, bool flagL, struct stat buf){
 
             printf("%ld ", buf.st_nlink);
 
-
-            pw = getpwuid(buf.st_uid);
             if(pw == NULL) {
-                perror("getpwuid");
+                fprintf(stderr,"ls: getpwuid error\n");
                 printf("%d ", buf.st_uid);
             }
             else {
                 printf("%s ", pw->pw_name);
             }
 
-            gid = getgrgid(buf.st_gid);
 
             if(gid == NULL) {
-                perror("getgrgid");
+                fprintf(stderr,"ls: getgrgid error\n");
                 printf("%d ", buf.st_gid);
             }
             else  {

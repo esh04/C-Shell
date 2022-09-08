@@ -38,7 +38,7 @@ int main()
         char *line = NULL;
         size_t sz = MAX_SIZE;
 
-        ssize_t flag1 = getline(&line,&sz,stdin);
+        getline(&line,&sz,stdin);
 
         store_history(line);
         parse(line);

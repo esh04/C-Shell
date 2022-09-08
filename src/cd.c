@@ -25,10 +25,8 @@ void cd_cmd(int argc, char **arg_list){
                 char *temp = arg_list[1] + 1;
                 char *newpath = (char *)(malloc(MAX_SIZE* sizeof(char)));
 
-                int start = 0;
-                while(home[start]!='\0'){
-                    newpath[start] = home[start];
-                    start++;
+                for(int i = 0; i < strlen(home); i++)
+                    newpath[i] = home[i];
                 }
                 strcat(newpath,temp);
                 chdir(newpath);
