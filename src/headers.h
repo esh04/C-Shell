@@ -36,5 +36,6 @@ extern int shell_grpid;
 extern processList process_list[MAX_LINE];
 extern int bg_idx;
 extern int time_taken_fg;
+extern int storage_in, storage_out;
 
 #endif

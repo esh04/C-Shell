@@ -10,9 +10,14 @@ void echo_cmd(int argc, char **arg_list){
         for(int i = 1; i< argc; i++){
             if(arg_list[i]){
                 if(i==1)
-                    printf("%s ", arg_list[i]);
-                else
                     printf("%s", arg_list[i]);
+                else
+                    printf(" %s", arg_list[i]);
+            }
+            else
+            {
+                printf("\n");    
+                return;
             }
         }
 

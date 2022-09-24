@@ -12,6 +12,7 @@ int shell_grpid;
 processList process_list[MAX_LINE];
 int bg_idx;
 int time_taken_fg;
+int storage_in, storage_out;
 
 int main()
 {
@@ -42,6 +43,10 @@ int main()
         getline(&line,&sz,stdin);
 
         store_history(line);
+
+        storage_in = dup(0);
+        storage_out = dup(1);
+
         parse(line);
 
     }

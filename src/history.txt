@@ -1,12 +1,20 @@
 exit
-ls -al
-ls
+sort < a.txt > b.txt
+sort < a.txt 
+echo hdiewnd >> a.txt
+echo hiii > a.txt
+echo hello > a.txt
 exit
-ls
+echo he >> b.txt
+echo hel > b.txt
+echo hello > b.txt
+cat a.txt > b.txt
+cat < a.txt
 exit
-history
+cat < a.txt
 exit
-history 
-history 1
-history
-pwd
+cat < a.txt
+exit
+cat < a.txt
+exit
+cat < a.txt
