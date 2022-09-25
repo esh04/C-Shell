@@ -9,12 +9,47 @@
 #include "execvp.h"
 #include "discover.h"
 #include "redirect.h"
+#include "sig.h"
+#include "job.h"
 
 void execute(char *commands[], int argc)
+{
+    // execute command here
+    if (strcmp(commands[0], "echo") == 0)
+        echo_cmd(argc, commands);
+    else if (strcmp(commands[0], "pwd") == 0)
+        pwd_cmd();
+    else if (strcmp(commands[0], "cd") == 0)
+        cd_cmd(argc, commands);
+    else if (strcmp(commands[0], "pinfo") == 0)
+        pinfo_cmd(argc, commands);
+    else if (strcmp(commands[0], "ls") == 0)
+        ls_cmd(argc, commands);
+    else if (strcmp(commands[0], "history") == 0)
+        history_cmd(argc, commands);
+    else if (strcmp(commands[0], "discover") == 0)
+        discover_cmd(argc, commands);
+    else if (strcmp(commands[0], "sig") == 0)
+        sig_cmd(argc, commands);
+    else if (strcmp(commands[0], "jobs") == 0)
+        job_cmd(argc, commands);
+    else if (strcmp(commands[0], "exit") == 0)
+        exit(0);
+    else
+        execvp_cmd(argc, commands);
+
+    return;
+}
+
+
+void redirect(char *commands[], int argc)
 {
     // declare a new command array
     char **new_command = malloc(MAX_LINE * sizeof(char *));
     int new_argc = 0;
+
+    storage_in = dup(0);
+    storage_out = dup(1);
 
     // parse for redirection
     for (int i = 0; i < argc; i++)
@@ -59,34 +94,65 @@ void execute(char *commands[], int argc)
         }
     }
 
-    // execute command here
-    if (strcmp(new_command[0], "echo") == 0)
-        echo_cmd(new_argc, new_command);
-    else if (strcmp(new_command[0], "pwd") == 0)
-        pwd_cmd();
-    else if (strcmp(new_command[0], "cd") == 0)
-        cd_cmd(new_argc, new_command);
-    else if (strcmp(new_command[0], "pinfo") == 0)
-        pinfo_cmd(new_argc, new_command);
-    else if (strcmp(new_command[0], "ls") == 0)
-        ls_cmd(new_argc, new_command);
-    else if (strcmp(new_command[0], "history") == 0)
-        history_cmd(new_argc, new_command);
-    else if (strcmp(new_command[0], "discover") == 0)
-        discover_cmd(new_argc, new_command);
-    else if (strcmp(new_command[0], "exit") == 0)
-        exit(0);
-    else
-        execvp_cmd(new_argc, new_command);
-
+    execute(new_command, new_argc);
     restore_dup();
+
     free(new_command);
+}
+
+void parse_token(char *input){
+    char *string = malloc(MAX_SIZE * (sizeof(char))), *subtoken,*ptr2;
+
+    strcpy(string, input);
+
+    char **commands = (char **)(malloc(MAX_LINE * (sizeof(char *))));
+    subtoken = strtok_r(string, " \t\r\n\a", &ptr2);
+    int argc = 0;
+    while (subtoken != NULL)
+    {
+        commands[argc++] = subtoken;
+        subtoken = strtok_r(NULL, " \t\r\n\a", &ptr2);
+    }
+
+    redirect(commands, argc);
+
+    free(commands);
+    free(string);    
+}
+
+
+void parse_pipes(char *input){
+    char *string = malloc(MAX_SIZE * (sizeof(char))), *subtoken,*ptr2;
+
+    strcpy(string, input);
+
+    char **commands = (char **)(malloc(MAX_LINE * (sizeof(char *))));
+    subtoken = strtok_r(string, "|", &ptr2);
+    int argc = 0;
+    while (subtoken != NULL)
+    {
+        commands[argc++] = subtoken;
+        subtoken = strtok_r(NULL, "|", &ptr2);
+    }
+
+    if(argc == 1){
+        parse_token(commands[0]);
+    }
+    else {
+        // add pipes code here
+        for(int i=0;i<argc;i++){
+            parse_token(commands[i]);
+        }
+    }
+
+    free(commands);
+    free(string);       
 }
 
 void parse(char *input)
 {
 
-    char *string = malloc(MAX_SIZE * (sizeof(char))), *token, *subtoken, *ptr1, *ptr2;
+    char *string = malloc(MAX_SIZE * (sizeof(char))), *token, *ptr1;
 
     strcpy(string, input);
 
@@ -112,20 +178,12 @@ void parse(char *input)
 
     while (token != NULL)
     {
-        char **commands = (char **)(malloc(MAX_LINE * (sizeof(char *))));
-        subtoken = strtok_r(token, " \t\r\n\a", &ptr2);
-        int argc = 0;
-        while (subtoken != NULL)
-        {
-            commands[argc++] = subtoken;
-            subtoken = strtok_r(NULL, " \t\r\n\a", &ptr2);
-        }
-
-        execute(commands, argc);
-
+        parse_pipes(token);
+        // printf("%s\n", token);
         token = strtok_r(NULL, ";\n", &ptr1);
-        free(commands);
     }
     free(string);
     return;
 }
+
+

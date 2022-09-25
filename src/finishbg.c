@@ -22,7 +22,7 @@ void finish_bg(){
                 }
                 else {
                     fprintf(stderr,"\n%s with pid %d exited abnormally\n", get_process_name(child_pid), child_pid);
-                    prompt();
+                    // prompt();
                 }
                 if(remove_process(child_pid) == -1)
                     {

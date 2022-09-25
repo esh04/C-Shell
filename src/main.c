@@ -3,6 +3,7 @@
 #include "parse.h"
 #include "history.h"
 #include "finishbg.h"
+#include "redirect.h"
 
 char *home;
 char *prev_dir;
@@ -44,10 +45,10 @@ int main()
 
         store_history(line);
 
-        storage_in = dup(0);
-        storage_out = dup(1);
+
 
         parse(line);
+
 
     }
     free(history);
