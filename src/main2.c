@@ -16,6 +16,7 @@ processList fg_process;
 int bg_idx;
 int time_taken_fg;
 int storage_in, storage_out;
+char *input_buffer;
 
 int main()
 {
@@ -56,11 +57,10 @@ int main()
 
         store_history(line);
 
-        // storage_in = dup(0);
-        // storage_out = dup(1);
+        storage_in = dup(0);
+        storage_out = dup(1);
 
         parse(line);
-
 
     }
     free(history);
