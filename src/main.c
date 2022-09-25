@@ -135,7 +135,8 @@ int main() {
         disableRawMode();
 
         // add \n at the end of inp
-        inp[pt++] = '\n';
+        if(inp[0] != '\0') 
+            inp[pt++] = '\n';
         store_history(inp);
         printf("\n");
         parse(inp);

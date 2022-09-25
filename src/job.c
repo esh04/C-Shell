@@ -68,13 +68,13 @@ int job_cmd(int argc, char **arg_list)
 
         if (read(fd1, READ_BUFFER, MAX_SIZE) < 0)
         {
-            perror("pinfo: Unable to read file\n");
+            perror("jobs: Unable to read file\n");
             return -1;
         }
 
         if (close(fd1) < 0)
         {
-            perror("pinfo: Unable to close the file\n");
+            perror("jobs: Unable to close the file\n");
             return -1;
         }
 

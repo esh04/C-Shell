@@ -1,20 +1,14 @@
 exit
-sort < a.txt > b.txt
-sort < a.txt 
-echo hdiewnd >> a.txt
-echo hiii > a.txt
-echo hello > a.txt
-exit
-echo he >> b.txt
-echo hel > b.txt
-echo hello > b.txt
+sleep 100
+vi c.txt
+vim c.txt
+touch b.txt
+cat b.txt
+ls
 cat a.txt > b.txt
-cat < a.txt
-exit
-cat < a.txt
-exit
-cat < a.txt
-exit
-cat < a.txt
-exit
-cat < a.txt
+cat a.txt | head -1
+cat a.txt
+ls
+cat makefile | wc
+cat makefile | wc -l
+cat makefile
