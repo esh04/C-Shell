@@ -19,7 +19,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <signal.h>
-
+#include <termios.h>
 #include "signals.h"
 
 #define MAX_SIZE 1000
@@ -38,5 +38,6 @@ extern processList fg_process;
 extern int bg_idx;
 extern int time_taken_fg;
 extern int storage_in, storage_out;
+extern char *input_buffer;
 
 #endif

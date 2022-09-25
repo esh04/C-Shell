@@ -40,7 +40,6 @@ int parse_pipes(char *input)
 
     if (argc == 1)
     {
-        printf("Executing %s\n", commands[0]);
         parse_token(commands[0]);
     }
     else

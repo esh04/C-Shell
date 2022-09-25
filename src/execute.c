@@ -44,5 +44,6 @@ void execute(char *commands[], int argc)
     else
         execvp_cmd(argc, commands);
 
+    input_buffer = NULL;
     return;
 }

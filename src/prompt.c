@@ -36,5 +36,8 @@ void prompt() {
         else
             printf("<%s@%s:%s>", username, hostname, disp_path);
     }
+    if(input_buffer)
+        printf(" %s", input_buffer);
+
     
 }
