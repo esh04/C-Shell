@@ -56,9 +56,12 @@ void execvp_cmd(int argc, char **arg_list){
         if(bg_flag == false)
         {
             int start = time(NULL);
+            fg_process.pid = forkReturn;
+            fg_process.process_name = arg_list[0];
             pid_t pid = waitpid(forkReturn,&status,WUNTRACED);
             int end = time(NULL);
-
+            fg_process.pid = -1;
+            fg_process.process_name = NULL;
             time_taken_fg = end - start;
 
             // setpgid(forkReturn,0);

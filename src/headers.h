@@ -34,6 +34,7 @@ extern char **history;
 extern char *history_path;
 extern int shell_grpid;
 extern processList process_list[MAX_LINE];
+extern processList fg_process;
 extern int bg_idx;
 extern int time_taken_fg;
 extern int storage_in, storage_out;

@@ -1,6 +1,6 @@
 #include "headers.h"
 #include "signal.h"
-
+#include "prompt.h"
 
 void init_process_list(){
     for(int x=0;x<MAX_LINE;x++)
@@ -43,4 +43,26 @@ int add_process(int pid, char * name){
         }
     return -1;
 
+}
+
+void ctrlC(){
+    printf("\n");
+    // prompt();
+    fflush(stdout);
+    // kill foreground processm
+    if(fg_process.pid!=-1){
+        kill(fg_process.pid,SIGINT);
+    }
+}
+
+void ctrlZ(){
+    printf("\n");
+    fflush(stdout);
+    // stop fg process and send it to background
+    if(fg_process.pid!=-1){
+        kill(fg_process.pid,SIGTSTP);
+        add_process(fg_process.pid,fg_process.process_name);
+        fg_process.pid = -1;
+        fg_process.process_name = NULL;
+    }
 }

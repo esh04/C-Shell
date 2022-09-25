@@ -4,6 +4,7 @@
 #include "history.h"
 #include "finishbg.h"
 #include "redirect.h"
+#include "signals.h"
 
 char *home;
 char *prev_dir;
@@ -11,6 +12,7 @@ char **history;
 char *history_path;
 int shell_grpid;
 processList process_list[MAX_LINE];
+processList fg_process;
 int bg_idx;
 int time_taken_fg;
 int storage_in, storage_out;
@@ -34,14 +36,23 @@ int main()
     init_process_list();
     shell_grpid = getpgid(getpid());
     signal(SIGCHLD,finish_bg);
+    signal(SIGINT,ctrlC);
+    signal(SIGTSTP,ctrlZ);
 
     while (1)
     {
+        fflush(stdout);
+
+        fg_process.pid = -1;
+        fg_process.process_name = NULL;
+
         prompt();
         char *line = NULL;
         size_t sz = MAX_SIZE;
+        ssize_t check_ctrlD = getline(&line,&sz,stdin);
 
-        getline(&line,&sz,stdin);
+        if(check_ctrlD == -1)
+            break;
 
         store_history(line);
 

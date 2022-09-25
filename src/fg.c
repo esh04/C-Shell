@@ -33,7 +33,13 @@ int fg_cmd(int argc, char **arg_list)
             return -1;
         }
         remove_process(process_pid);     // remove process from process_list (bg process)
-        waitpid(-1, &status, WUNTRACED); // wait for process to finish
+
+        fg_process.pid = process_pid;
+        fg_process.process_name = process_list[num].process_name;
+        waitpid(-1, &status, WUNTRACED); 
+        fg_process.pid = -1;
+        fg_process.process_name = NULL;
+        
         if (WIFSTOPPED(status))
         {
             add_process(process_pid, process_list[num].process_name);
