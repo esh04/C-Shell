@@ -116,8 +116,12 @@ int main() {
                         printf("\b \b");
                     }
                 } else if (c == 9) { // TAB character
+                    // int temp = strlen(inp);
                     autocomplete(inp);
-
+                    // inp = input_buffer;
+                    pt = strlen(inp);
+                    // printf("\nhiih %s\n", inp);
+                    // printf("\nhuuiih %s\n", input_buffer);
                 } else if (c == 4) {
                     exit(0);
                 } else {

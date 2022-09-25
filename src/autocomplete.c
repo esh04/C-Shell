@@ -5,20 +5,18 @@
 
 int isSubstring(char *s1, char *s2)
 {
+    // if(strncmp(s1, s2, strlen(s2)) == 0) return 1;
     int M = strlen(s1);
     int N = strlen(s2);
 
-    for (int i = 0; i <= N - M; i++)
-    {
-        int j;
+    int j;
 
-        for (j = 0; j < M; j++)
-            if (s2[i + j] != s1[j])
-                break;
+    for (j = 0; j < M; j++)
+        if (s2[j] != s1[j])
+            break;
 
-        if (j == M)
-            return i;
-    }
+    if (j == M)
+        return 0;
 
     return -1;
 }
@@ -48,7 +46,6 @@ void autocomplete(char *input)
         fprintf(stderr, "autocomplete: Can't open directory.\n");
         return;
     }
-
     int check;
     if (argc - 1 < 0)
         check = 0;
@@ -59,9 +56,9 @@ void autocomplete(char *input)
     char *temp = malloc(MAX_LINE * (sizeof(char)));
     while ((d = readdir(dh)) != NULL)
     {
-        // check if commands[check] is a substring of d->d_name
 
-        if (isSubstring(commands[check], d->d_name) != -1)
+        // check if commands[check] is a substring of d->d_name
+        if (commands[check] == NULL || isSubstring(commands[check], d->d_name) != -1)
         {
             if (num == 0)
             {
