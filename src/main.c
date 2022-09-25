@@ -130,6 +130,8 @@ int main() {
         }
         disableRawMode();
 
+        // add \n at the end of inp
+        inp[pt++] = '\n';
         store_history(inp);
         printf("\n");
         parse(inp);
