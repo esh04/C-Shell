@@ -140,7 +140,7 @@ int main() {
         store_history(inp);
         printf("\n");
         parse(inp);
-
+        restore_dup();
 
     }
     free(history);
