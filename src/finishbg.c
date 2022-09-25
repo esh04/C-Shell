@@ -17,7 +17,7 @@ void finish_bg(){
                 }
                 else if (WIFSTOPPED(status)){
                     fprintf(stderr,"\n%s with pid %d suspended normally\n", get_process_name(child_pid), child_pid);
-                    prompt();
+                    return; //dont remove from list if stopped
 
                 }
                 else {

@@ -83,6 +83,7 @@ int job_cmd(int argc, char **arg_list)
         char *process_state = strtok_r(NULL, " \t", &temp);
 
         // check S and R - not sure if this is correct
+        // T for stopped
         if (process_state[0] == 'S' || process_state[0] == 'R')
         {
 

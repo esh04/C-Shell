@@ -11,6 +11,8 @@
 #include "redirect.h"
 #include "sig.h"
 #include "job.h"
+#include "bg.h"
+#include "fg.h"
 
 void execute(char *commands[], int argc)
 {
@@ -33,6 +35,10 @@ void execute(char *commands[], int argc)
         sig_cmd(argc, commands);
     else if (strcmp(commands[0], "jobs") == 0)
         job_cmd(argc, commands);
+    else if (strcmp(commands[0], "bg") == 0)
+        bg_cmd(argc, commands);
+    else if (strcmp(commands[0], "fg") == 0)
+        fg_cmd(argc, commands);
     else if (strcmp(commands[0], "exit") == 0)
         exit(0);
     else
