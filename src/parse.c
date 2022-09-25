@@ -1,113 +1,10 @@
 #include "headers.h"
 #include "parse.h"
-#include "echo.h"
-#include "pwd.h"
-#include "cd.h"
-#include "pinfo.h"
-#include "ls.h"
-#include "history.h"
-#include "execvp.h"
-#include "discover.h"
 #include "redirect.h"
-#include "sig.h"
-#include "job.h"
-#include "bg.h"
-#include "fg.h"
 
-void execute(char *commands[], int argc)
+void parse_token(char *input)
 {
-    // execute command here
-    if (strcmp(commands[0], "echo") == 0)
-        echo_cmd(argc, commands);
-    else if (strcmp(commands[0], "pwd") == 0)
-        pwd_cmd();
-    else if (strcmp(commands[0], "cd") == 0)
-        cd_cmd(argc, commands);
-    else if (strcmp(commands[0], "pinfo") == 0)
-        pinfo_cmd(argc, commands);
-    else if (strcmp(commands[0], "ls") == 0)
-        ls_cmd(argc, commands);
-    else if (strcmp(commands[0], "history") == 0)
-        history_cmd(argc, commands);
-    else if (strcmp(commands[0], "discover") == 0)
-        discover_cmd(argc, commands);
-    else if (strcmp(commands[0], "sig") == 0)
-        sig_cmd(argc, commands);
-    else if (strcmp(commands[0], "jobs") == 0)
-        job_cmd(argc, commands);
-    else if (strcmp(commands[0], "bg") == 0)
-        bg_cmd(argc, commands);
-    else if (strcmp(commands[0], "fg") == 0)
-        fg_cmd(argc, commands);
-    else if (strcmp(commands[0], "exit") == 0)
-        exit(0);
-    else
-        execvp_cmd(argc, commands);
-
-    return;
-}
-
-
-void redirect(char *commands[], int argc)
-{
-    // declare a new command array
-    char **new_command = malloc(MAX_LINE * sizeof(char *));
-    int new_argc = 0;
-
-    storage_in = dup(0);
-    storage_out = dup(1);
-
-    // parse for redirection
-    for (int i = 0; i < argc; i++)
-    {
-        char *inputfile = NULL;
-        char *outputfile = NULL;
-
-        if (strcmp(commands[i], "<") == 0)
-        {
-            inputfile = commands[i + 1];
-            i += 1; // no need to parse the filename (don't include in final command)
-            if (input_redirect(inputfile) == -1)
-            {
-                fprintf(stderr, "Error in input redirection\n");
-                return;
-            }
-        }
-        else if (strcmp(commands[i], ">") == 0)
-        {
-            outputfile = commands[i + 1];
-            i += 1;
-            if (output_redirect(outputfile) == -1)
-            {
-                fprintf(stderr, "Error in output redirection\n");
-                return;
-            }
-        }
-        else if (strcmp(commands[i], ">>") == 0)
-        {
-            outputfile = commands[i + 1];
-            i += 1;
-            if (append_redirect(outputfile) == -1)
-            {
-                fprintf(stderr, "Error in append redirection\n");
-                return;
-            }
-        }
-        else
-        {
-            new_command[new_argc] = commands[i];
-            new_argc += 1;
-        }
-    }
-
-    execute(new_command, new_argc);
-    restore_dup();
-
-    free(new_command);
-}
-
-void parse_token(char *input){
-    char *string = malloc(MAX_SIZE * (sizeof(char))), *subtoken,*ptr2;
+    char *string = malloc(MAX_SIZE * (sizeof(char))), *subtoken, *ptr2;
 
     strcpy(string, input);
 
@@ -123,12 +20,12 @@ void parse_token(char *input){
     redirect(commands, argc);
 
     free(commands);
-    free(string);    
+    free(string);
 }
 
-
-void parse_pipes(char *input){
-    char *string = malloc(MAX_SIZE * (sizeof(char))), *subtoken,*ptr2;
+int parse_pipes(char *input)
+{
+    char *string = malloc(MAX_SIZE * (sizeof(char))), *subtoken, *ptr2;
 
     strcpy(string, input);
 
@@ -141,18 +38,63 @@ void parse_pipes(char *input){
         subtoken = strtok_r(NULL, "|", &ptr2);
     }
 
-    if(argc == 1){
+    if (argc == 1)
+    {
+        printf("Executing %s\n", commands[0]);
         parse_token(commands[0]);
     }
-    else {
-        // add pipes code here
-        for(int i=0;i<argc;i++){
-            parse_token(commands[i]);
+    else
+    {
+        commands[argc] = NULL;
+        int fd[2];
+        int fd_in = STDIN_FILENO;
+
+        for (int i = 0; i < argc; ++i)
+        {
+
+            if (pipe(fd) == -1)
+            {
+                perror("pipe");
+                return -1;
+            }
+
+            pid_t forkReturn = fork();
+            if (forkReturn == -1)
+            {
+                perror("fork");
+                return -1;
+            }
+            else if (forkReturn == 0)
+            {
+                if (i > 0)
+                    dup2(fd_in, STDIN_FILENO);
+                if (i < argc - 1)
+                {
+                    dup2(fd[1], STDOUT_FILENO);
+                }
+                if(close(fd[0]) == -1)
+                {
+                    perror("close");
+                    return -1;
+                }
+                parse_token(commands[i]);
+                exit(0);
+            }
+            else
+            {
+                wait(NULL);
+                if(close(fd[1]) == -1)
+                {
+                    perror("close");
+                    return -1;
+                }
+                fd_in = fd[0];
+            }
         }
     }
 
     free(commands);
-    free(string);       
+    free(string);
 }
 
 void parse(char *input)
@@ -191,5 +133,3 @@ void parse(char *input)
     free(string);
     return;
 }
-
-

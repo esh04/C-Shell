@@ -51,12 +51,13 @@ int main()
         size_t sz = MAX_SIZE;
         ssize_t check_ctrlD = getline(&line,&sz,stdin);
 
-        if(check_ctrlD == -1)
-            break;
+        // if(check_ctrlD == -1)
+        //     break;
 
         store_history(line);
 
-
+        // storage_in = dup(0);
+        // storage_out = dup(1);
 
         parse(line);
 
