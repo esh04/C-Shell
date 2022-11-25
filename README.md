@@ -1,4 +1,8 @@
 # C-Shell
+
+A working linux shell built in C that supports most linux shell functionalities such as the basic linux commands, process control commands, redirection, autocomplete on tab, piping, signal handling, parsing on the basis of semicolons and ampersands etc. Foreground and Background process can also be executed.
+
+
 - Problem statements in the [pdf1](./OSN_Assignment_2.pdf) and [pdf2](./Assignment_3-Extending_the_shell.pdf)
 
 - To run the shell
