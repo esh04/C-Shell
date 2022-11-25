@@ -1,4 +1,5 @@
 # C-Shell
+- Problem statements in the [pdf1](./OSN_Assignment_2.pdf) and [pdf2](./Assignment_3-Extending_the_shell.pdf)
 
 - To run the shell
     - `make`
